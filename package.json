@@ -1,0 +1,42 @@
+{
+  "name": "smart-sale-shop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --mode development",
+    "build": "vue-cli-service build --mode production",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^31.0.0",
+    "@ckeditor/ckeditor5-vue": "^2.0.1",
+    "@sipec/vue3-tags-input": "^3.0.4",
+    "axios": "^0.24.0",
+    "bootstrap": "^5.1.3",
+    "bootstrap-vue-3": "^0.0.5",
+    "core-js": "^3.6.5",
+    "i": "^0.3.7",
+    "node-sass": "^6.0.1",
+    "npm": "^8.1.2",
+    "sass-loader": "10.1.1",
+    "sweetalert2": "^11.1.9",
+    "tiny-emitter": "^2.1.0",
+    "vee-validate": "^4.5.5",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.12",
+    "vue-sweetalert2": "^5.0.2",
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0",
+    "sass": "^1.43.4"
+  }
+}
