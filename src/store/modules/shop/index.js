@@ -1,6 +1,6 @@
 import { http } from '../../../api'
 
-const book = {
+const shop = {
   namespaced: true,
   state: {
     shop: {},
@@ -39,4 +39,4 @@ const book = {
   }
 };
 
-export default book
+export default shop

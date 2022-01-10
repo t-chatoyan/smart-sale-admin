@@ -7,6 +7,8 @@ import NotFound from '../components/pages/404'
 import Dashboard from '../components/pages/Dashboard'
 import Shops from '../components/pages/Shops'
 import AddShop from '../components/pages/Shops/add'
+import Categories from '../components/pages/Categories'
+import AddCategories from '../components/pages/Categories/add'
 import AuthLayout from '../components/layouts/AuthLayout'
 import IndexLayout from '../components/layouts/IndexLayout'
 
@@ -31,7 +33,7 @@ const router = createRouter({
       },
       children: [
         {
-          path: 'sign-in',
+          path: '/sign-in',
           name: 'SignIn',
           component: SignIn,
           meta: {
@@ -84,7 +86,27 @@ const router = createRouter({
               auth
             ]
           }
-        }
+        },
+        {
+          path: '/categories',
+          name: 'categories',
+          component: Categories,
+          meta: {
+            middleware: [
+              auth
+            ]
+          }
+        },
+        {
+          path: '/category/:id',
+          name: 'categories_add',
+          component: AddCategories,
+          meta: {
+            middleware: [
+              auth
+            ]
+          }
+        },
       ]
     },
     {

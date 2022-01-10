@@ -18,7 +18,7 @@ const app = createApp(App)
   .use(router)
   .use(CKEditor)
   .use(VueSweetalert2)
-  .use(BootstrapVue3);
+  .use(BootstrapVue3)
 
 app.config.globalProperties.$api = http;
 app.config.globalProperties.$axios = axios;

@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import auth from './modules/auth'
 import shop from './modules/shop'
+import category from './modules/category'
 import createPersistedState from "vuex-persistedstate";
 
 const dataState = createPersistedState({
@@ -11,7 +12,8 @@ const dataState = createPersistedState({
 export default createStore({
   modules: {
     shop: shop,
-    auth: auth
+    auth: auth,
+    category: category,
   },
   plugins: [dataState]
 })

@@ -45,7 +45,7 @@ export default {
 
     onSubmit () {
       console.log(77777);
-      this.errorMsg = ''
+      this.errorMsg = '';
       this.login(this.loginFormData).then(() => {
         this.$router.push('/')
       }).catch(err => {

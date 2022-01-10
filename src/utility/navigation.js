@@ -18,5 +18,15 @@ module.exports = [
         icon: 'ti-home'
       }
     ]
+  },
+  {
+    name: 'Category',
+    links: [
+      {
+        name: 'Categories',
+        path: '/categories',
+        icon: 'ti-bag'
+      }
+    ]
   }
 ]
