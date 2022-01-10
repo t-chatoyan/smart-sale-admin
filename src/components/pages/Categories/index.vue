@@ -20,9 +20,9 @@
               <h6 class="main-content-label mb-1">Categories List</h6>
             </div>
             <div class="table-responsive">
-              <b-table :items="categoriesList" :fields="tableFields">
+              <b-table striped hover :items="categoriesList" :fields="tableFields">
                 <template #cell(index)="row">
-                  <div>{{row.items}}</div>
+                  {{ row.value }}
                 </template>
                 <template #cell(image)="row">
                   <img class="img-sm" v-if="row.image" :src="row.logo" alt="">
@@ -105,7 +105,7 @@ export default {
     }),
     tableFields () {
       return [
-        { key: 'index', label: 'index' },
+        'index',
         {
           key: 'image',
           label: 'image',

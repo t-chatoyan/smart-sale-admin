@@ -28,7 +28,10 @@ const shop = {
   },
   mutations: {
     setShopsList (state, data) {
-      state.shopsList = data
+      state.shopsList = data.map((item, index) => {
+        item.index = index + 1;
+        return item
+      })
     },
     setShop (state, data) {
       state.shop = data

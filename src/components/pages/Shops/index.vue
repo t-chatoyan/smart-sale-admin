@@ -20,7 +20,10 @@
               <h6 class="main-content-label mb-1">Shops List</h6>
             </div>
             <div class="table-responsive">
-              <b-table :items="shopsList" :fields="tableFields">
+              <b-table striped hover :items="shopsList" :fields="tableFields">
+                <template #cell(index)="row">
+                  {{ row.value }}
+                </template>
                 <template #cell(logo)="row">
                   <img class="img-sm" v-if="row.logo" :src="row.logo" alt="">
                   <img class="img-sm" v-else src="@/assets/img/no-image.png" alt="">
@@ -107,7 +110,7 @@ export default {
     }),
     tableFields () {
       return [
-        { key: 'index', label: 'index' },
+        'index',
         {
           key: 'logo',
           label: 'logo',
@@ -130,7 +133,6 @@ export default {
         },
         {
           key: 'id',
-          label: 'actions',
           sortable: false
         }
       ]

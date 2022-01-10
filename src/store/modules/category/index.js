@@ -28,7 +28,10 @@ const category = {
   },
   mutations: {
     setCategoriesList (state, data) {
-      state.categoriesList = data
+      state.categoriesList = data.map((item, index) => {
+        item.index = index + 1;
+        return item
+      })
     },
     setCategories (state, data) {
       state.category = data
