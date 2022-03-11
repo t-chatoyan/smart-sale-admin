@@ -11,6 +11,16 @@
   border-radius: 0;
 }
 
+.remove-input-arrow {
+  -moz-appearance: textfield;
+}
+.remove-input-arrow::-webkit-outer-spin-button,
+.remove-input-arrow::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 .input-group {
   position: relative;
   display: flex;

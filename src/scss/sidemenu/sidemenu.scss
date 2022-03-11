@@ -21,9 +21,10 @@
   .nav-item {
     transition-duration: 0.25s;
     margin: 6px 0;
+    text-decoration: none;
   }
 
-  
+
 
   .nav-sub {
     max-height: 0;
@@ -552,6 +553,35 @@
   }
 
   .nav-item.active .nav-link {
+    background-color: #eaedf7;
+    position: relative;
+    z-index: 1;
+    margin: 10px auto;
+    text-align: center;
+    border-radius: 30px 0 0 30px;
+    margin-left: 0;
+    border: 0px solid transparent;
+    border-right: 0px;
+    width: inherit;
+
+    .sidemenu-icon {
+      font-size: 18px;
+      line-height: 0;
+      margin-right: 10px;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      border-radius: 50%;
+      box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+      color: #ffffff;
+      background: #6259ca;
+    }
+
+    .sidemenu-label {
+      color: #6259ca;
+    }
+
     &:before, &:after {
       border-right: 20px solid #25233c;
     }

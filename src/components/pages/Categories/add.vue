@@ -2,10 +2,10 @@
   <div>
     <div class="page-header">
       <div>
-        <h2 class="main-content-title tx-24 mg-b-5">{{isCreate ? 'Add' : 'Edit'}} Category</h2>
+        <h2 class="main-content-title tx-24 mg-b-5">{{isEdit ? 'Edit' : 'Add'}} Category</h2>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#" @click="$router.go(-1)">Back</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{isCreate ? 'Add' : 'Edit'}} Category</li>
+          <li class="breadcrumb-item active" aria-current="page">{{isEdit ? 'Edit' : 'Add'}} Category</li>
         </ol>
       </div>
       <div class="d-flex">
@@ -16,8 +16,8 @@
         <div class="card custom-card">
           <div class="card-body">
             <div>
-              <h6 class="main-content-label mb-1">Add Category</h6>
-              <p class="text-muted card-sub-title">Add Category.</p>
+              <h6 class="main-content-label mb-1">{{isEdit ? 'Edit' : 'Add'}} Category</h6>
+              <p class="text-muted card-sub-title">{{isEdit ? 'Edit' : 'Add'}} Category.</p>
             </div>
             <div>
               <Form
@@ -28,7 +28,7 @@
               >
                 <TextInput
                   name="title"
-                  :value="formData.name"
+                  v-model="formData.title"
                   type="text"
                   label="Title"
                   placeholder="Category Title"
@@ -109,6 +109,7 @@ export default {
     } else {
       this.isEdit = true;
       this.getCategory(this.categoryId).then(res => {
+        console.log(res.data);
         this.formData = res.data;
       })
     }

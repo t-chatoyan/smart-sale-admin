@@ -12,6 +12,7 @@ import {http} from './api/index';
 import router from './router';
 import eventBus from './eventBus'
 import store from './store'
+import Toaster from '@meforma/vue-toaster';
 
 const app = createApp(App)
   .use(store)
@@ -19,6 +20,7 @@ const app = createApp(App)
   .use(CKEditor)
   .use(VueSweetalert2)
   .use(BootstrapVue3)
+  .use(Toaster,{position: 'top', duration: 1500})
 
 app.config.globalProperties.$api = http;
 app.config.globalProperties.$axios = axios;

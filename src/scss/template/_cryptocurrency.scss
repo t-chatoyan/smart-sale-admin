@@ -341,20 +341,6 @@ input:checked + label.payment-cards {
   color: $primary;
 }
 
-.form input:checked + label:after, form input:checked + label:after {
-  content: "";
-  width: 20px;
-  height: 20px;
-  line-height: 17px;
-  border-style: solid;
-  border-width: 0 35px 35px 0px;
-  border-color: $primary $primary transparent;
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
 .form input:checked + label {
   &:after {
     content: "";
@@ -379,16 +365,6 @@ input:checked + label.payment-cards {
     font-size: 14px;
     color: $white;
   }
-}
-
-form input:checked + label:before, .form input:checked + label:before {
-  content: "\2713";
-  z-index: 999;
-  position: absolute;
-  top: -11px;
-  right: 4px;
-  font-size: 14px;
-  color: $white;
 }
 
 .crypto-buysell-card {

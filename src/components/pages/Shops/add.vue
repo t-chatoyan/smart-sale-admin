@@ -2,10 +2,10 @@
   <div>
     <div class="page-header">
       <div>
-        <h2 class="main-content-title tx-24 mg-b-5">{{isCreate ? 'Add' : 'Edit'}} Shop</h2>
+        <h2 class="main-content-title tx-24 mg-b-5">{{isEdit ? 'Edit' : 'Add'}} Shop</h2>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#" @click="$router.go(-1)">Back</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{isCreate ? 'Add' : 'Edit'}} Shop</li>
+          <li class="breadcrumb-item active" aria-current="page">{{isEdit ? 'Edit' : 'Add'}} Shop</li>
         </ol>
       </div>
       <div class="d-flex">
@@ -16,8 +16,8 @@
         <div class="card custom-card">
           <div class="card-body">
             <div>
-              <h6 class="main-content-label mb-1">Add Shop</h6>
-              <p class="text-muted card-sub-title">Add Shop and Brunches.</p>
+              <h6 class="main-content-label mb-1">{{isEdit ? 'Edit' : 'Add'}} Shop</h6>
+              <p class="text-muted card-sub-title">{{isEdit ? 'Edit' : 'Add'}} Shop and Brunches.</p>
             </div>
             <div>
               <Form
@@ -25,10 +25,31 @@
                 class="d-flex flex-column"
                 @submit="formSubmit"
                 :validation-schema="schema"
+                id="addShop"
               >
+                <div>
+                  <label class="form-label">Logo:</label>
+                  <label class="upload" @dragover="dragover" @dragleave="dragleave" @drop="drop('FileDoc',$event)">
+                    <div class="add">
+                      <img src="../../../assets/img/svgs/cloud-computing.svg" width="49px" alt="">
+                    </div>
+                    <div class="choose-file cursor-pointer">
+                      <input ref="file" class="cursor-pointer" accept="image/png,image/jpeg,image/jpg"
+                             @change="fileUpload($event.target.files)" name="logo" type="file">
+                      <button class="choose btn">Drag and drop a file here or click</button>
+                    </div>
+                  </label>
+                  <div class="uploaded-files" v-if="formData.logo">
+                    <div class="d-flex flex-wrap" >
+                      <div class="item">
+                        <img :src="formData.logo" alt="file" v-if="formData.logo">
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <TextInput
                   name="name"
-                  :value="formData.name"
+                  v-model="formData.name"
                   type="text"
                   label="Name"
                   placeholder="Shop Name"
@@ -40,7 +61,7 @@
                           :editor="editor"
                           v-model="formData.description"
                   ></ckeditor>
-                  <p v-if="formData.description === '' && descriptionIsTouched">Description is required</p>
+                  <p class="invalid-feedback d-block" v-if="formData.description === '' && descriptionIsTouched">Description is required</p>
                 </div>
                 <div class="accordion mb-4">
                   <legend class="col-form-label col-sm-12 pt-0 font-weight-bold">Branches</legend>
@@ -85,10 +106,10 @@
                     </div>
                   </div>
                   <div class="d-flex justify-content-end mt-2">
-                    <button class="btn ripple btn-main-primary" @click="showAddBranchModal = true">Add New Branch +</button>
+                    <button type="button" class="btn ripple btn-main-primary" @click="showAddBranchModal = true">Add New Branch +</button>
                   </div>
                 </div>
-                <button class="btn ripple btn-main-primary">Save</button>
+                <button class="btn ripple btn-main-primary" type="submit" :disabled="buttonDisable" :class="buttonDisable ? 'button-readonly' : ''">Save</button>
               </Form>
             </div>
           </div>
@@ -102,20 +123,23 @@
             @submit="branchFormSubmit"
             :initial-values="branchFormData"
             :validation-schema="branchFormSchema"
+            id="branchFormData"
           >
             <TextInput
                     name="name"
                     type="text"
                     label="Branch Name"
                     placeholder="Shop Name"
+                    v-model="branchFormData.name"
             />
             <TextInput
                     name="address"
                     type="text"
                     label="Branch Address"
                     placeholder="Branch Address"
+                    v-model="branchFormData.address"
             />
-            <FieldArray name="phone_numbers" v-slot="{ fields, push, remove }">
+            <FieldArray name="phone_numbers" key-path="phone" v-slot="{ fields, push, remove }">
               <legend class="fs-18 pt-0 font-weight-bold">Phone Numbers</legend>
               <div
                 v-for="(field, index) in fields"
@@ -123,17 +147,38 @@
                 class="d-flex justify-content-between"
               >
                 <TextInput
-                        class="flex-1"
-                        :name="`phone_numbers[${index}].phone`"
-                        type="text"
-                        :placeholder="'Phone Number ' + (index + 1)"
+                  v-if="branchFormData.phone_numbers[index]"
+                  class="flex-1"
+                  :name="`phone_numbers[${index}].phone`"
+                  type="text"
+                  v-model="branchFormData.phone_numbers[index].phone"
+                  :placeholder="'Phone Number ' + (index + 1)"
                 />
                 <button type="button" class="btn btn-icon btn-outline-danger ml-3" v-if="index > 0" @click.prevent="remove(index)"><i class="fa fa-close"></i></button>
               </div>
-              <button type="button" class="btn btn-main-primary" @click.prevent="push({phone: ''})">Add Phone Number +</button>
+              <button type="button" class="btn btn-main-primary" @click.prevent="() => {branchFormData.phone_numbers.push({ phone: '' }); push({ phone: '' })}">Add Phone Number +</button>
             </FieldArray>
+            <div class="mt-3" >
+              <legend class="fs-18 pt-0 font-weight-bold">Working Days</legend>
+              <div class="d-flex">
+                <div class="mr-4">
+                  <input type="radio" id="always-open" value="always" v-model="workingDays">
+                  <label class="ml-1" for="always-open">Always open</label>
+                </div>
+                <div>
+                  <input type="radio" id="selected" value="selected" v-model="workingDays">
+                  <label class="ml-1" for="selected">Open on selected hours</label>
+                </div>
+              </div>
+              <div class="form-group" v-if="workingDays === 'selected'">
+                <div v-for="(item, index) in working_days" :key="index" class="d-flex align-items-center mb-3">
+                  <div class="mr-4 fw-normal fs-7 text-capitalize" style="width: 100px">{{item.name}}</div>
+                  <Datepicker name="" v-model="item.value" timePicker range />
+                </div>
+              </div>
+            </div>
             <div class="d-flex form-group justify-content-end">
-              <button class="btn btn-main-primary">Save</button>
+              <button type="submit" class="btn btn-main-primary">Save</button>
             </div>
           </Form>
         </div>
@@ -148,15 +193,18 @@ import { Form, FieldArray } from 'vee-validate';
 import * as Yup from 'yup';
 import TextInput from '../../components/TextInput'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css'
 
 export default {
   name: 'CourseAdd',
   data () {
     return {
       tag: '',
+      workingDays: 'always',
+      files: [],
       tags: [],
       editor: ClassicEditor,
-      showVideo: false,
       isEdit: false,
       showAddBranchModal: false,
       descriptionIsTouched: false,
@@ -164,16 +212,49 @@ export default {
       formData: {
         name: '',
         description: '',
-        branches: []
+        branches: [],
+        logo: '',
       },
       branchFormData: {
         name: '',
+        address: '',
+        working_days: {},
         phone_numbers: [
           {
             phone: ''
           }
         ]
       },
+      working_days: [
+        {
+          name: 'monday',
+          value: ''
+        },
+        {
+          name: 'tuesday',
+          value: ''
+        },
+        {
+          name: 'wednesday',
+          value: ''
+        },
+        {
+          name: 'thursday',
+          value: ''
+        },
+        {
+          name: 'friday',
+          value: ''
+        },
+        {
+          name: 'saturday',
+          value: ''
+        },
+        {
+          name: 'sunday',
+          value: ''
+        },
+      ],
       isCreate: false,
       shopId: ''
     }
@@ -181,7 +262,8 @@ export default {
   components: {
     Form,
     FieldArray,
-    TextInput
+    TextInput,
+    Datepicker
   },
   computed: {
     ...mapState({
@@ -210,20 +292,21 @@ export default {
 
     return {
       branchFormSchema,
-      schema
+      schema,
     };
   },
   created () {
     this.shopId = this.$route.params.id;
-    console.log(this.shopId);
     if (this.shopId === 'add') {
       this.isEdit = false;
       this.isCreate = true;
-      this.showVideo = true
     } else {
       this.isEdit = true;
       this.getShop(this.shopId).then(res => {
         this.formData = res.data;
+        if (this.formData.logo) {
+          this.formData.logo = this.formData.logo.conversions.small;
+        }
       })
     }
   },
@@ -232,41 +315,176 @@ export default {
       createShop: 'shop/createShop',
       getShop: 'shop/getShop',
       updateShop: 'shop/updateShop'
-
     }),
     branchFormSubmit(values) {
-      this.formData.branches.push(values);
+      let data = values;
       this.showAddBranchModal = false;
-    },
-    x() {
-      console.log(4444);
+      const form = document.getElementById('branchFormData')
+      if (this.workingDays === 'always') {
+        data.working_days = {openAlways: true}
+      } else {
+        let weekDays = {}
+        this.working_days.map((item, index) => {
+          weekDays[index + 1] = item.value
+        });
+        data.working_days = weekDays
+      }
+      this.formData.branches.push(data);
+      form.reset();
+      this.branchFormData = {
+        name: '',
+        working_days: {},
+        phone_numbers: [
+          {
+            phone: ''
+          }
+        ]
+      };
+      this.working_days.map(item => {
+        item.value = '';
+        return item;
+      })
     },
     formSubmit () {
-      console.log(555555555);
-      // const form = document.getElementById('bookAddForm')
-      // const formData = new FormData(form)
-      // this.buttonDisable = true
-      //
-      // if (this.isCreate === true) {
-      //   this.createBook(formData).then(() => {
-      //     this.$toasted.success(this.$t('messages.success.courseCreated')).goAway(1500)
-      //     this.$router.push('/books')
-      //   }).catch(() => {
-      //     this.$toasted.error(this.$t('messages.error.somethingWentWrong')).goAway(1500)
-      //   }).finally(() => {
-      //     this.buttonDisable = false
-      //   })
-      // } else {
-      //   this.updateBook({ data: formData, id: this.$route.params.id }).then(() => {
-      //     this.$toasted.success(this.$t('messages.success.courseUpdated')).goAway(1500)
-      //     this.$router.push('/books')
-      //   }).catch(() => {
-      //     this.$toasted.error(this.$t('messages.error.somethingWentWrong')).goAway(1500)
-      //   }).finally(() => {
-      //     this.buttonDisable = false
-      //   })
-      // }
-    }
+      const form = document.getElementById('addShop')
+      const formData = new FormData(form);
+      if (this.formData.description === '') {
+        this.descriptionIsTouched = true;
+        return false
+      } else {
+        formData.append('description', this.formData.description)
+      }
+      if (this.formData.branches && this.formData.branches.length) {
+        this.formData.branches.map((item, index) => {
+          formData.append('branches[' + index +'][name]', item.name);
+          formData.append('branches[' + index +'][address]', item.address);
+          formData.append('branches[' + index +'][working_days]', JSON.stringify(item.working_days));
+          formData.append('branches[' + index +'][phone_numbers]', JSON.stringify(item.phone_numbers))
+        })
+      } else {
+        return false;
+      }
+
+      this.buttonDisable = true;
+
+      if (this.isCreate === true) {
+        this.createShop(formData).then(() => {
+          this.$toast.success('Shop has been created successfully!')
+          this.$router.push('/shops')
+        }).catch(() => {
+          this.$toast.error('Something went wrong!')
+        }).finally(() => {
+          this.buttonDisable = false
+        })
+      } else {
+        this.updateShop({ data: formData, id: this.shopId }).then(() => {
+          this.$toast.success('Shop has been updated successfully!')
+          this.$router.push('/shops')
+        }).catch(() => {
+          this.$toast.error('Something went wrong!')
+        }).finally(() => {
+          this.buttonDisable = false
+        })
+      }
+    },
+    fileUpload (files) {
+      this.formData.logo = ''
+      this.fileReader(files)
+    },
+    dragover (event) {
+      event.preventDefault()
+      event.currentTarget.style.border = '3px solid #5152C6'
+    },
+    dragleave (event) {
+      event.currentTarget.style.border = '2px dashed #dcd9f5'
+    },
+    drop (type, event) {
+      event.preventDefault()
+      this.fileReader(event.dataTransfer.files)
+      event.currentTarget.style.border = '2px dashed #dcd9f5'
+    },
+    fileReader (files) {
+      const _this = this;
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          _this.formData.logo = e.target.result
+        };
+        reader.readAsDataURL(files[i])
+      }
+    },
   }
 }
 </script>
+<style lang="scss">
+  .upload {
+    border: 2px dashed #dcd9f5;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 20px;
+    min-height: 275px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    margin-bottom: 26px;
+    position: relative;
+    overflow: hidden;
+    background-color: #f4f3ff;
+    .add {
+      margin-bottom: 10px;
+    }
+    .choose-file {
+      position: relative;
+      input {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 222;
+      }
+      .btn {
+        height: 50px;
+      }
+    }
+  }
+  .uploaded-files {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    audio{
+      &:focus{
+        border: none;
+        outline: none;
+      }
+    }
+    .item {
+      border: 1px solid #e9e9f3;
+      border-radius: 2px;
+      margin: 10px 10px;
+      position: relative;
+      padding: 5px;
+      width: 80px;
+      height: 80px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .delete-btn {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        background: #e56565;
+        border-radius: 50%;
+        line-height: 25px;
+      }
+    }
+  }
+</style>

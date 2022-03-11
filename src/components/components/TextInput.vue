@@ -2,15 +2,15 @@
     <div class="form-group" >
         <label :for="name" v-if="label">{{ label }}</label>
         <input
-                :class="{ 'is-invalid': !!errorMessage, success: meta.valid }"
-                class="form-control"
-                :name="name"
-                :id="name"
-                :type="type"
-                :value="inputValue"
-                :placeholder="placeholder"
-                @input="handleChange"
-                @blur="handleBlur"
+          :class="{ 'is-invalid': !!errorMessage, success: meta.valid, 'remove-input-arrow': removeArrow }"
+          class="form-control"
+          :name="name"
+          :id="name"
+          :type="type"
+          :value="modelValue"
+          :placeholder="placeholder"
+          @input="handleChange"
+          @blur="handleBlur"
         />
 
         <p class="invalid-feedback" v-show="errorMessage">
@@ -28,8 +28,8 @@
         type: String,
         default: "text",
       },
-      value: {
-        type: String,
+      modelValue: {
+        type: [String, Number],
         default: "",
       },
       name: {
@@ -44,6 +44,10 @@
         type: String,
         default: "",
       },
+      removeArrow: {
+        type: Boolean,
+        default: false,
+      },
     },
 
     setup(props) {
@@ -51,19 +55,22 @@
         value: inputValue,
         errorMessage,
         handleBlur,
-        handleChange,
         meta,
       } = useField(props.name, undefined, {
-        initialValue: props.value,
+        inputValue: props.value,
       });
 
       return {
-        handleChange,
         handleBlur,
         errorMessage,
         inputValue,
         meta,
       };
     },
+    methods: {
+      handleChange(event) {
+        this.$emit("update:modelValue", event.target.value);
+      }
+    }
   };
 </script>

@@ -9,6 +9,8 @@ import Shops from '../components/pages/Shops'
 import AddShop from '../components/pages/Shops/add'
 import Categories from '../components/pages/Categories'
 import AddCategories from '../components/pages/Categories/add'
+import Products from '../components/pages/Products'
+import AddProduct from '../components/pages/Products/add'
 import AuthLayout from '../components/layouts/AuthLayout'
 import IndexLayout from '../components/layouts/IndexLayout'
 
@@ -101,6 +103,26 @@ const router = createRouter({
           path: '/category/:id',
           name: 'categories_add',
           component: AddCategories,
+          meta: {
+            middleware: [
+              auth
+            ]
+          }
+        },
+        {
+          path: '/products',
+          name: 'products',
+          component: Products,
+          meta: {
+            middleware: [
+              auth
+            ]
+          }
+        },
+        {
+          path: '/product/:id',
+          name: 'product_add',
+          component: AddProduct,
           meta: {
             middleware: [
               auth

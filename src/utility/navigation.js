@@ -28,5 +28,15 @@ module.exports = [
         icon: 'ti-bag'
       }
     ]
+  },
+  {
+    name: 'Product',
+    links: [
+      {
+        name: 'Products',
+        path: '/products',
+        icon: 'ti-dropbox-alt'
+      }
+    ]
   }
 ]

@@ -21,7 +21,7 @@
               </ul>
             </li>
             <router-link tag="li" :to="link.path" v-else class="nav-item" :key="'nav-item-'+i+'-'+ j ">
-              <a class="nav-link" href="#"><span class="shape1"></span><span class="shape2"></span><i :class="link.icon + ' sidemenu-icon'"></i><span class="sidemenu-label text-capitalize">{{link.name}}</span></a>
+              <div class="nav-link"><span class="shape1"></span><span class="shape2"></span><i :class="link.icon + ' sidemenu-icon'"></i><span class="sidemenu-label text-capitalize">{{link.name}}</span></div>
             </router-link>
           </template>
         </template>
