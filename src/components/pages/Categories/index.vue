@@ -58,7 +58,7 @@
                   </div>
                 </template>
               </table-lite>
-              <div class="d-flex justify-content-end  mt-3">
+              <div v-if="pagination" class="d-flex justify-content-end  mt-3">
                 <div class="mr-3">
                   <b-form-select
                           @change="changePaginationPerPage"
@@ -154,7 +154,7 @@ export default {
     }
   },
   created () {
-    this.getCategoryData.sort = `${this.sortable.order}.${this.sortable.sort}`
+    this.getCategoryData.sort = `${this.sortable.order}.${this.sortable.sort}`;
     this.getCategoriesList(this.getCategoryData)
   },
   methods: {
