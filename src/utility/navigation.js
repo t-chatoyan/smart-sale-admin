@@ -20,16 +20,6 @@ module.exports = [
     ]
   },
   {
-    name: 'Category',
-    links: [
-      {
-        name: 'Categories',
-        path: '/categories',
-        icon: 'ti-bag'
-      }
-    ]
-  },
-  {
     name: 'Product',
     links: [
       {
