@@ -5,7 +5,7 @@ module.exports = [
       {
         name: 'dashboard',
         path: '/dashboard',
-        icon: 'ti-server'
+        icon: 'ti-home'
       }
     ]
   },
@@ -15,7 +15,7 @@ module.exports = [
       {
         name: 'Shops',
         path: '/shops',
-        icon: 'ti-home'
+        icon: 'ti-shopping-cart-full'
       }
     ]
   },
