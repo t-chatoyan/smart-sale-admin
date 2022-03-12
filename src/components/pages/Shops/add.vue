@@ -68,7 +68,12 @@
                   <div class="accordion-item" v-for="(branch, index ) in formData.branches" :key="index">
                     <h2 class="accordion-header">
                       <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" :aria-controls="'#collapse' + index">
-                        {{branch.name}}
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                          <div>{{branch.name}}</div>
+                          <button @click="removeBranch(branch.id, index)" type="button" class="btn btn-outline-danger mr-2 mt-1 mb-1">
+                            <i class="fe fe-trash-2"></i>
+                          </button>
+                        </div>
                       </button>
                     </h2>
                     <div :id="'collapse' + index" class="accordion-collapse collapse">
@@ -195,6 +200,7 @@ import TextInput from '../../components/TextInput'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Datepicker from 'vue3-date-time-picker';
 import 'vue3-date-time-picker/dist/main.css'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'CourseAdd',
@@ -314,7 +320,8 @@ export default {
     ...mapActions({
       createShop: 'shop/createShop',
       getShop: 'shop/getShop',
-      updateShop: 'shop/updateShop'
+      updateShop: 'shop/updateShop',
+      deleteBranch: 'shop/deleteBranch',
     }),
     branchFormSubmit(values) {
       let data = values;
@@ -345,8 +352,33 @@ export default {
         return item;
       })
     },
+    removeBranch (id = '', index) {
+      Swal.fire({
+        text: 'Are you sure you want to delete?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#748C41',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.value) {
+          if (id !== '') {
+            this.deleteBranch({ id }).then(() => {
+              this.formData.branches = this.formData.branches.filter(item => id !== item.id)
+              this.$toast.success('Branch has been deleted successfully!')
+            }).catch(() => {
+              this.$toast.error('Something went wrong!')
+            })
+          } else {
+            this.formData.branches = this.formData.branches.filter((item, i) => index !== i);
+            this.$toast.success('Branch has been deleted successfully!')
+          }
+        }
+      })
+    },
     formSubmit () {
-      const form = document.getElementById('addShop')
+      const form = document.getElementById('addShop');
       const formData = new FormData(form);
       if (this.formData.description === '') {
         this.descriptionIsTouched = true;
@@ -356,10 +388,12 @@ export default {
       }
       if (this.formData.branches && this.formData.branches.length) {
         this.formData.branches.map((item, index) => {
-          formData.append('branches[' + index +'][name]', item.name);
-          formData.append('branches[' + index +'][address]', item.address);
-          formData.append('branches[' + index +'][working_days]', JSON.stringify(item.working_days));
-          formData.append('branches[' + index +'][phone_numbers]', JSON.stringify(item.phone_numbers))
+          if (!item.id) {
+            formData.append('branches[' + index +'][name]', item.name);
+            formData.append('branches[' + index +'][address]', item.address);
+            formData.append('branches[' + index +'][working_days]', JSON.stringify(item.working_days));
+            formData.append('branches[' + index +'][phone_numbers]', JSON.stringify(item.phone_numbers))
+          }
         })
       } else {
         return false;

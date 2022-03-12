@@ -28,31 +28,37 @@ const shop = {
     },
     getShop: ({ commit }, params) => {
       return http.get(`/shop/${params}`).then(res => {
-        commit('setShop', res.data.data)
+        commit('setShop', res.data.data);
         return res.data
       })
     },
     createShop: ({ commit }, params) => {
       return http.post(`/shop`, params).then(res => {
-        commit('createShop', res.data.data)
+        commit('createShop', res.data.data);
         return res.data
       })
     },
     updateShop: ({ commit }, params) => {
-      return http.put(`/shop/${params.id}`, params).then(res => {
-        commit('updateShop', res.data.data)
+      return http.post(`/shop-update/${params.id}`, params.data).then(res => {
+        commit('updateShop', res.data.data);
         return res.data
       })
     },
     deleteShop: ({ commit }, params) => {
       return http.delete(`/shop/${params.id}`).then(res => {
-        commit('deleteShop', {data: res.data, id: params.id})
+        commit('deleteShop', {data: res.data, id: params.id});
+        return res.data
+      })
+    },
+    deleteBranch: ({ commit }, params) => {
+      return http.delete(`/delete-shop-branch/${params.id}`).then(res => {
+        commit('deleteBranch', {data: res.data, id: params.id});
         return res.data
       })
     },
     restoreShop: ({ commit }, params) => {
       return http.get(`/shop/${params.id}/restore`).then(res => {
-        commit('restoreShop', {data: res.data, id: params.id})
+        commit('restoreShop', {data: res.data, id: params.id});
         return res.data
       })
     }
@@ -101,6 +107,9 @@ const shop = {
         state.shopsList = state.shopsList.filter(item => item.id !== data.id)
         state.userShopsList = state.userShopsList.filter(item => item.id !== data.id)
       }
+    },
+    deleteBranch (state, data) {
+      console.log(state, data);
     },
     restoreShop (state, data) {
       state.shopsList.map(item => {

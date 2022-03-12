@@ -10,46 +10,49 @@ const product = {
     getProducts: ({ commit }, params) => {
       let url = '/product';
       if (params) {
-        const q = new URLSearchParams(params)
+        const q = new URLSearchParams(params);
         url = url + '?' + q.toString()
       }
       return http.get(url).then(res => {
-        commit('setProductsList', res.data.data)
+        commit('setProductsList', res.data.data);
         return res.data
       })
     },
     getProduct: ({ commit }, params) => {
       return http.get(`/product/${params}`).then(res => {
-        commit('setProduct', res.data.data)
+        commit('setProduct', res.data.data);
         return res.data
       })
     },
     createProduct: ({ commit }, params) => {
       return http.post(`/product`, params).then(res => {
-        commit('createProduct', res.data.data)
+        commit('createProduct', res.data.data);
         return res.data
       })
     },
     updateProduct: ({ commit }, params) => {
       return http.post(`/product/${params.id}?_method=put`, params.data).then(res => {
-        commit('updateProduct', res.data.data)
+        commit('updateProduct', res.data.data);
         return res.data
       })
     },
     deleteProduct: ({ commit }, params) => {
       return http.delete(`/product/${params.id}`).then(res => {
-        commit('deleteProduct', {data: res.data, id: params.id})
+        commit('deleteProduct', {data: res.data, id: params.id});
         return res.data
       })
     },
     restoreProduct: ({ commit }, params) => {
       return http.get(`/product/${params.id}/restore`).then(res => {
-        commit('restoreProduct', {data: res.data, id: params.id})
+        commit('restoreProduct', {data: res.data, id: params.id});
         return res.data
       })
     },
-    deleteProductPhoto: () => {
-      console.log('deleteProductPhoto');
+    deleteProductPhoto: ({ commit }, params) => {
+      return http.delete(`/delete-product-photo/${params.id}?product_id=${params.product_id}`).then(res => {
+        commit('deleteProductPhoto', {data: res.data, id: params.id});
+        return res.data
+      })
     },
   },
   mutations: {
@@ -74,6 +77,9 @@ const product = {
       } else {
         state.productsList = state.productsList.filter(item => item.id !== data.id)
       }
+    },
+    deleteProductPhoto (state, data) {
+      console.log(state, data);
     },
     restoreProduct (state, data) {
       state.productsList.map(item => {

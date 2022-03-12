@@ -237,8 +237,8 @@ export default {
     };
   },
   created () {
-    this.getUserShops({})
-    this.getCategories({})
+    this.getUserShops({});
+    this.getCategories({});
     this.productId = this.$route.params.id;
 
     if (this.productId === 'add') {
@@ -271,7 +271,7 @@ export default {
       deleteProductPhoto: 'product/deleteProductPhoto',
     }),
     formSubmit () {
-      const form = document.getElementById('addProduct')
+      const form = document.getElementById('addProduct');
       const formData = new FormData(form);
       if (this.formData.short_description === '') {
         this.shortDescriptionIsTouched = true;
@@ -282,25 +282,25 @@ export default {
       if (this.formData.is_available) {
         formData.set('is_available', 1)
       } else {
-        formData.set('is_available', 0)
+        formData.set('is_available', 0);
         formData.set('in_stock', 0)
       }
       if (this.shop) {
         formData.append('shop_id', this.shop.id)
       } else {
-        this.shopIsTouched = true
+        this.shopIsTouched = true;
         return null;
       }
       if (this.categories) {
         formData.append('categories[0]', this.categories.id)
       } else {
-        this.categoriesIsTouched = true
+        this.categoriesIsTouched = true;
         return null;
       }
       if (this.subCategories) {
         formData.set('categories[1]', this.subCategories.id)
       } else {
-        this.subCategoriesIsTouched = true
+        this.subCategoriesIsTouched = true;
         return null;
       }
 
@@ -308,7 +308,7 @@ export default {
 
       if (this.isCreate === true) {
         this.createProduct(formData).then(() => {
-          this.$toast.success('Product has been created successfully!')
+          this.$toast.success('Product has been created successfully!');
           this.$router.push('/products')
         }).catch(() => {
           this.$toast.error('Something went wrong!')
@@ -317,7 +317,7 @@ export default {
         })
       } else {
         this.updateProduct({ data: formData, id: this.productId }).then(() => {
-          this.$toast.success('Product has been updated successfully!')
+          this.$toast.success('Product has been updated successfully!');
           this.$router.push('/products')
         }).catch(() => {
           this.$toast.error('Something went wrong!')
@@ -328,7 +328,8 @@ export default {
     },
     selectCategory (option) {
       this.formData.categories.push(option.id)
-      this.categories = option
+      this.categories = option;
+      this.subCategories = [];
       if (this.isEdit) {
         this.categoriesList.map(item => {
           if (item.id === option.id) {
@@ -340,7 +341,7 @@ export default {
       }
     },
     selectSubCategory (option) {
-      this.formData.categories.push(option.id)
+      this.formData.categories.push(option.id);
       this.subCategories = option
     },
     selectShops (option) {
@@ -384,14 +385,15 @@ export default {
       }).then((result) => {
         if (result.value) {
           if (id !== '') {
-            this.deleteProductPhoto(id).then(res => {
-              console.log(res);
-              this.files = this.files.filter(el => el.id !== id)
-              this.$refs.photo.value = null
+            this.deleteProductPhoto({ id, product_id: this.productId }).then(() => {
+              this.formData.photos = this.formData.photos.filter(el => el.id !== id);
+              this.$toast.success('Image has been deleted successfully!');
+            }).catch(() => {
+              this.$toast.error('Something went wrong!')
             })
           } else {
-            this.formData.photos = this.formData.photos.filter((el, ind) => ind !== index)
-            this.$refs.photo.value = null
+            this.formData.photos = this.formData.photos.filter((el, ind) => ind !== index);
+            this.$toast.success('Image has been deleted successfully!');
           }
         }
       })
